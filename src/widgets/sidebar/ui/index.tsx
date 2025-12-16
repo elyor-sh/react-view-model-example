@@ -1,8 +1,9 @@
-import {Home} from "lucide-react"
+import {ChevronUp, Home, User2} from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -11,6 +12,10 @@ import {
   SidebarMenuItem,
 } from "@/shared/ui/sidebar"
 import {Link} from "react-router";
+import {observer} from "mobx-react-lite";
+import {useGlobalStore} from "@/app/globals.ts";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/shared/ui/dropdown-menu.tsx";
+import {Logout} from "@/features/logout/ui";
 
 const items = [
   {
@@ -20,7 +25,9 @@ const items = [
   },
 ]
 
-export function AppSidebar() {
+export const AppSidebar = observer(() => {
+  const {context: {session}} = useGlobalStore()
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -42,6 +49,28 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton>
+                  <User2 /> {session.email}
+                  <ChevronUp className="ml-auto" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="top"
+                className="w-[--radix-popper-anchor-width]"
+              >
+                <Logout />
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
-}
+})
+
+AppSidebar.displayName = "AppSidebar";

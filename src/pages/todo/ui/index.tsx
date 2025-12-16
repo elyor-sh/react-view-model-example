@@ -5,6 +5,7 @@ import {TodosList} from "@/entities/todos/ui";
 const TodosPageContent = observer(() => {
   return (
     <div className="container mx-auto">
+      <h3 className="mb-2">Todos</h3>
       <TodosList />
     </div>
   )

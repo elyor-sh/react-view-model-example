@@ -14,4 +14,12 @@ function Spinner({ className, ...props }: ComponentProps<"svg">) {
   )
 }
 
-export { Spinner }
+function Loading(props: ComponentProps<"svg">) {
+  return (
+    <div className="flex items-center justify-center h-full w-full">
+      <Spinner {...props} />
+    </div>
+  )
+}
+
+export { Spinner, Loading }

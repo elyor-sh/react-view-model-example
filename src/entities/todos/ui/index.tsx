@@ -2,13 +2,13 @@ import {observer} from "mobx-react-lite";
 import {useTodosPageStore} from "@/pages/todo/provider";
 import {TodoListVM} from "@/entities/todos/view-model";
 import {TodoDetails} from "@/entities/todos/ui/details";
-import {Spinner} from "@/shared/ui/spinner.tsx";
+import {Loading} from "@/shared/ui/spinner.tsx";
 
 export const TodosList = observer(() => {
   const {vm} = useTodosPageStore(TodoListVM)
 
   if (vm.loadTodos.state.loading) {
-    return <Spinner className="size-24"/>
+    return <Loading className="size-12"/>
   }
 
   return (
