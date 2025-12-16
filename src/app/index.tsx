@@ -1,8 +1,8 @@
 import "./globals.css"
 import {createBrowserRouter, RouterProvider} from "react-router";
 import {AuthProvider} from "@/provider/auth-provider/ui";
-import {HomePage} from "@/pages/home/ui";
 import {LoginPage} from "@/pages/login/ui";
+import {TodosPage} from "@/pages/todo/ui";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <HomePage />,
+        element: <TodosPage />,
       },
     ],
   }

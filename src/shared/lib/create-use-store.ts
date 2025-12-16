@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {type IReactionDisposer, observable, runInAction} from 'mobx';
-import { useContext, useEffect, useRef, useState } from 'react';
 import type {Context} from 'react';
+import {useContext, useEffect, useRef, useState} from 'react';
 
 export interface ViewModelConstructor<TContext> {
   systemFileName?: string;
@@ -21,6 +21,15 @@ export function createUseStore<TContext>(
     beforeUnmount?: (context: TContext, vm?: any) => void;
   }
 ) {
+
+  function useCtx (): TContext {
+    const context = useContext(ctx);
+    if (!context) {
+      throw new Error('context must be used within a Provider');
+    }
+    return context;
+  }
+
   function useStore(): { context: TContext };
   function useStore<TViewModel extends new (context: TContext) => ViewModelConstructor<TContext>>(
     ViewModel: TViewModel
@@ -37,13 +46,6 @@ export function createUseStore<TContext>(
   ): { vm: InstanceType<TViewModel>; context: TContext };
   function useStore(ViewModel?: any, props?: any, exclude?: any) {
     const isFirstRenderRef = useRef(true);
-    function useCtx (): TContext {
-      const context = useContext(ctx);
-      if (!context) {
-        throw new Error('context must be used within a Provider');
-      }
-      return context;
-    }
     const context = useCtx();
 
     useState(() => {
