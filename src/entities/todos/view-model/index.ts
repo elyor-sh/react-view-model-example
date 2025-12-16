@@ -1,15 +1,14 @@
 import type {ViewModelConstructor} from "@/shared/lib/create-use-store.ts";
-import type {TodosPageModel} from "@/pages/todo/provider";
+import type {TodosPageContextType} from "@/pages/todo/provider";
 import {makeAutoObservable, runInAction} from "mobx";
 import {withAsync} from "@/shared/lib/withAsync.ts";
 import {http} from "@/shared/http";
 import {MOCK_TODOS} from "@/entities/todos/api";
 
-type ViewModel = ViewModelConstructor<TodosPageModel>;
+type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
 export class TodoListVM implements ViewModel {
-
-  constructor(public context: TodosPageModel) {
+  constructor(public context: TodosPageContextType) {
     makeAutoObservable(this, {context: false, loadTodos: false}, {autoBind: true})
   }
 

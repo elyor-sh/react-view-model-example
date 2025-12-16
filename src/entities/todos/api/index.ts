@@ -1,3 +1,7 @@
+export type TodoListQueryParams = {
+  search?: string;
+}
+
 export const MOCK_TODOS = [
   {
     "userId": 1,

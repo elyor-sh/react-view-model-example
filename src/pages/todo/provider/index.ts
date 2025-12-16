@@ -13,3 +13,5 @@ export class TodosPageModel {
 export const TodosPageContext = createContext<TodosPageModel | undefined>(undefined);
 
 export const useTodosPageStore = createUseStore(TodosPageContext);
+
+export type TodosPageContextType = TodosPageModel;

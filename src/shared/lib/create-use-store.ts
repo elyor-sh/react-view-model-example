@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {type IReactionDisposer, observable, runInAction} from 'mobx';
+import {autorun, type IReactionDisposer, observable, runInAction} from 'mobx';
 import type {Context} from 'react';
 import {useContext, useEffect, useRef, useState} from 'react';
 
@@ -108,4 +108,14 @@ export function createUseStore<TContext>(
   }
 
   return useStore;
+}
+
+export function appendAutoRun <C extends ViewModelConstructor<any>>(ctx: C, ...fns: Array<() => void>) {
+  if (!ctx.autorunDisposers) {
+    ctx.autorunDisposers = [];
+  }
+  fns.forEach(fn => {
+    const disposer = autorun(fn);
+    ctx.autorunDisposers?.push(disposer);
+  })
 }
