@@ -3,15 +3,13 @@ import {Input} from "@/shared/ui/input"
 import {Label} from "@/shared/ui/label"
 import {CardContent} from "@/shared/ui/card"
 import {Lock, Mail} from "lucide-react"
-import {useNavigate} from "react-router";
 import {useGlobalStore} from "@/app/globals.ts";
 import {observer} from "mobx-react-lite";
 import {cn} from "@/shared/lib/utils.ts"
 import {LoginVM} from "@/features/auth/view-model";
 
 export const Login = observer(() => {
-  const navigate = useNavigate();
-  const {vm} = useGlobalStore(LoginVM, {navigate});
+  const {vm} = useGlobalStore(LoginVM);
 
   return (
     <CardContent className="space-y-4">

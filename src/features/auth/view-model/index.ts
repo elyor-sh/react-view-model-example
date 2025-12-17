@@ -2,15 +2,10 @@ import type {ViewModelConstructor} from "@/shared/lib/create-use-store.ts";
 import type {GlobalContextType} from "@/app/globals.ts";
 import {makeAutoObservable, runInAction} from "mobx";
 import {http} from "@/shared/http";
-import type {NavigateFunction} from "react-router";
 import type {ChangeEvent} from "react";
 import {withAsync} from "@/shared/lib/withAsync.ts";
 
 type ViewModel = ViewModelConstructor<GlobalContextType>;
-
-type Props = {
-  navigate: NavigateFunction
-}
 
 type Form = {
   email: string;
@@ -24,8 +19,8 @@ export class LoginVM implements ViewModel {
     password: ''
   }
 
-  constructor(public context: GlobalContextType, public props: Props) {
-    makeAutoObservable(this, {context: false, props: false, login: false}, {autoBind: true})
+  constructor(public context: GlobalContextType) {
+    makeAutoObservable(this, {context: false, login: false}, {autoBind: true})
   }
 
   setForm (e: ChangeEvent<HTMLInputElement>) {
@@ -40,7 +35,7 @@ export class LoginVM implements ViewModel {
       this.context.session.loginDate = new Date().toISOString();
     })
     localStorage.setItem('user', JSON.stringify(this.context.session));
-    this.props.navigate('/');
+    this.context.router.navigate('/');
   })
 
   beforeMount () {

@@ -3,9 +3,11 @@ import {useTodosPageStore} from "@/pages/todo/provider";
 import {TodoListVM} from "@/entities/todos/view-model";
 import {TodoDetails} from "@/entities/todos/ui/details";
 import {Loading} from "@/shared/ui/spinner.tsx";
+import {useGlobalStore} from "@/app/globals.ts";
 
 export const TodosList = observer(() => {
-  const {vm} = useTodosPageStore(TodoListVM)
+  const {context} = useGlobalStore()
+  const {vm} = useTodosPageStore(TodoListVM, {router: context.router})
 
   if (vm.loadTodos.state.loading) {
     return <Loading className="size-12"/>
