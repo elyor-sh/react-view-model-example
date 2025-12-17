@@ -1,12 +1,12 @@
 import {appendAutoRun, type ViewModelConstructor} from "@/shared/lib/create-use-store.ts";
 import type {TodosPageContextType} from "@/pages/todo/provider";
-import {makeAutoObservable, runInAction} from "mobx";
+import {runInAction} from "mobx";
 import {withAsync} from "@/shared/lib/withAsync.ts";
 import {http} from "@/shared/http";
-import {MOCK_TODOS, todoListQueryParamsSchema} from "@/entities/todos/api";
+import {todoListQueryParamsSchema} from "@/entities/todos/api";
 import type {AppRouter} from "@/provider/router-provider/model";
-import {stringifyQueryParams} from "@/shared/lib/query-params.ts";
 import {parseError} from "@/shared/lib/parseError";
+import type {Todo} from "@/entities/todos/model";
 
 type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
@@ -15,9 +15,7 @@ type Props = {
 }
 
 export class TodoListVM implements ViewModel {
-
   constructor(public context: TodosPageContextType, public props: Props) {
-    makeAutoObservable(this, {context: false, props: false, loadTodos: false}, {autoBind: true})
     appendAutoRun(this, () => {
       void this.loadTodos();
     })
@@ -25,17 +23,29 @@ export class TodoListVM implements ViewModel {
 
   loadTodos = withAsync(async () => {
     try {
-      const parsed = await todoListQueryParamsSchema.parseAsync(this.props.router.queryParams);
-      const todoList = await http.get(`/api/todos?${stringifyQueryParams(parsed)}`, MOCK_TODOS);
+      const params = await todoListQueryParamsSchema.parseAsync(this.props.router.queryParams);
+      const res = await http.get<Todo[]>(`/todos`, {params, signal: this.loadTodos.abortController.signal});
       runInAction(() => {
-        this.context.todoModel.todoList = todoList;
+        this.context.todoModel.todoList = res.data;
       })
-    }catch (e) {
-      parseError(e);
+    }catch (error) {
+      parseError(error);
     }
   })
 
-  deleteTodo (id: number) {
-    this.context.todoModel.todoList = this.context.todoModel.todoList.filter((todo) => todo.id !== id);
+   deleteTodo = withAsync(async (id: number) => {
+     try {
+       await http.delete(`/todos/${id}`, {signal: this.deleteTodo.abortController.signal})
+       runInAction(() => {
+         this.context.todoModel.todoList = this.context.todoModel.todoList.filter((todo) => todo.id !== id);
+       })
+     }catch (error) {
+       parseError(error)
+     }
+   })
+
+  beforeUnmount () {
+    this.loadTodos.abortController.abort();
+    this.deleteTodo.abortController.abort();
   }
 }

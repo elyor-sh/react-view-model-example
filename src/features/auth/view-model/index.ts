@@ -1,7 +1,7 @@
 import type {ViewModelConstructor} from "@/shared/lib/create-use-store.ts";
 import type {GlobalContextType} from "@/app/globals.ts";
 import {makeAutoObservable, runInAction} from "mobx";
-import {http} from "@/shared/http";
+import {sleep} from "@/shared/http";
 import type {ChangeEvent} from "react";
 import {withAsync} from "@/shared/lib/withAsync.ts";
 
@@ -29,7 +29,8 @@ export class LoginVM implements ViewModel {
   }
 
   login = withAsync(async () => {
-    const user = await http.post('/api/login', this.form)
+    await sleep(1000)
+    const user = this.form
     runInAction(() => {
       this.context.session.email = user.email;
       this.context.session.loginDate = new Date().toISOString();

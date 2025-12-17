@@ -2,7 +2,6 @@ import {z} from "zod";
 
 export const todoListQueryParamsSchema = z.object({
   search: z.string().optional(),
-  categoryId: z.string().describe('Category id to filter todos')
 });
 
 export type TodoListQueryParams = z.infer<typeof todoListQueryParamsSchema>;
