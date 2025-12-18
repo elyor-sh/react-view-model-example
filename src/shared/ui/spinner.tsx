@@ -1,7 +1,7 @@
-import {Loader2Icon} from "lucide-react"
+import { Loader2Icon } from "lucide-react";
 
-import {cn} from "@/shared/lib/utils.ts"
-import type {ComponentProps} from "react";
+import { cn } from "@/shared/lib/utils.ts";
+import type { ComponentProps } from "react";
 
 function Spinner({ className, ...props }: ComponentProps<"svg">) {
   return (
@@ -11,15 +11,21 @@ function Spinner({ className, ...props }: ComponentProps<"svg">) {
       className={cn("size-4 animate-spin", className)}
       {...props}
     />
-  )
+  );
 }
 
-function Loading(props: ComponentProps<"svg">) {
+type LoadingProps = {
+  show: boolean;
+} & ComponentProps<"svg">;
+
+function Loading({ show, ...props }: LoadingProps) {
+  if (!show) return null;
+
   return (
-    <div className="flex items-center justify-center h-full w-full">
+    <div className="absolute flex items-center justify-center h-full w-full">
       <Spinner {...props} />
     </div>
-  )
+  );
 }
 
-export { Spinner, Loading }
+export { Spinner, Loading };

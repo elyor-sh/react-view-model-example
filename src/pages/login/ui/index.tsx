@@ -1,7 +1,7 @@
-import {Login} from "@/features/auth";
-import {Lock} from "lucide-react";
-import {Card, CardDescription, CardHeader, CardTitle} from "@/shared/ui";
-import {Link} from "react-router";
+import { Login } from "@/features/auth";
+import { Lock } from "lucide-react";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/shared/ui";
+import { Link } from "react-router";
 
 export const LoginPage = () => {
   return (
@@ -43,5 +43,5 @@ export const LoginPage = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};

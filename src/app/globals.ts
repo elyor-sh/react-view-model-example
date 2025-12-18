@@ -1,7 +1,7 @@
-import {createContext} from "react";
-import {SessionModel} from "@/entities/session/model";
-import {createUseStore} from "@/shared/lib/create-use-store.ts";
-import type {AppRouter} from "@/provider/router-provider/model";
+import { createContext } from "react";
+import { SessionModel } from "@/entities/session/model";
+import { createUseStore } from "@/shared/lib/create-use-store.ts";
+import type { AppRouter } from "@/provider/router-provider/model";
 
 export class Globals {
   session: SessionModel;

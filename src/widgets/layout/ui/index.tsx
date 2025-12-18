@@ -1,7 +1,6 @@
-import {SidebarProvider, SidebarTrigger} from "@/shared/ui/sidebar.tsx";
-import {AppSidebar} from "@/widgets/sidebar/ui";
-import type {ReactNode} from "react";
-
+import { SidebarProvider, SidebarTrigger } from "@/shared/ui/sidebar.tsx";
+import { AppSidebar } from "@/widgets/sidebar/ui";
+import type { ReactNode } from "react";
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -12,5 +11,5 @@ export function Layout({ children }: { children: ReactNode }) {
         {children}
       </main>
     </SidebarProvider>
-  )
+  );
 }

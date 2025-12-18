@@ -1,4 +1,4 @@
-import {makeAutoObservable} from "mobx";
+import { makeAutoObservable } from "mobx";
 
 export interface Todo {
   userId: number;
@@ -11,6 +11,6 @@ export class TodosModel {
   todoList: Todo[] = [];
 
   constructor() {
-    makeAutoObservable(this, undefined, {autoBind: true});
+    makeAutoObservable(this, undefined, { autoBind: true });
   }
 }

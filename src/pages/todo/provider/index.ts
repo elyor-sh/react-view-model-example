@@ -1,6 +1,6 @@
-import {createContext} from "react";
-import {TodosModel} from "@/entities/todos/model";
-import {createUseStore} from "@/shared/lib/create-use-store.ts";
+import { createContext } from "react";
+import { TodosModel } from "@/entities/todos/model";
+import { createUseStore } from "@/shared/lib/create-use-store.ts";
 
 export class TodosPageModel {
   todoModel: TodosModel;
@@ -10,7 +10,9 @@ export class TodosPageModel {
   }
 }
 
-export const TodosPageContext = createContext<TodosPageModel | undefined>(undefined);
+export const TodosPageContext = createContext<TodosPageModel | undefined>(
+  undefined,
+);
 
 export const useTodosPageStore = createUseStore(TodosPageContext);
 

@@ -1,9 +1,9 @@
-import {Card, CardContent, CardHeader, CardTitle} from "@/shared/ui/card";
-import {Button} from "@/shared/ui/button";
-import {Trash2, User} from "lucide-react";
-import type {Todo} from "@/entities/todos/model";
-import {observer} from "mobx-react-lite";
-import {Badge} from "@/shared/ui/badge.tsx";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Button } from "@/shared/ui/button";
+import { Trash2, User } from "lucide-react";
+import type { Todo } from "@/entities/todos/model";
+import { observer } from "mobx-react-lite";
+import { Badge } from "@/shared/ui/badge.tsx";
 
 interface TodoProps {
   todo: Todo;
@@ -23,11 +23,17 @@ export const TodoDetails = observer(({ todo, onDelete }: TodoProps) => {
             </CardTitle>
 
             <div className="flex items-center gap-2 mt-3">
-              <Badge variant="secondary" className="text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-0">
+              <Badge
+                variant="secondary"
+                className="text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-0"
+              >
                 <User className="w-3 h-3 mr-1" />
                 User {todo.userId}
               </Badge>
-              <Badge variant="outline" className="text-xs font-medium border-slate-300 dark:border-slate-700">
+              <Badge
+                variant="outline"
+                className="text-xs font-medium border-slate-300 dark:border-slate-700"
+              >
                 #{todo.id}
               </Badge>
             </div>

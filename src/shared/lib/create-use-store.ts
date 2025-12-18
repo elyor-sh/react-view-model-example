@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {autorun, type IReactionDisposer, observable, runInAction} from 'mobx';
-import type {Context} from 'react';
-import {useContext, useEffect, useRef, useState} from 'react';
+import { autorun, type IReactionDisposer, observable, runInAction } from "mobx";
+import type { Context } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 export interface ViewModelConstructor<TContext> {
   systemFileName?: string;
@@ -19,30 +19,33 @@ export function createUseStore<TContext>(
     beforeMount?: (context: TContext, vm?: any) => void;
     afterMount?: (context: TContext, vm?: any) => void;
     beforeUnmount?: (context: TContext, vm?: any) => void;
-  }
+  },
 ) {
-
-  function useCtx (): TContext {
+  function useCtx(): TContext {
     const context = useContext(ctx);
     if (!context) {
-      throw new Error('context must be used within a Provider');
+      throw new Error("context must be used within a Provider");
     }
     return context;
   }
 
   function useStore(): { context: TContext };
-  function useStore<TViewModel extends new (context: TContext) => ViewModelConstructor<TContext>>(
-    ViewModel: TViewModel
-  ): { vm: InstanceType<TViewModel>; context: TContext };
   function useStore<
     TViewModel extends new (
       context: TContext,
-      p: ConstructorParameters<TViewModel>[1]
+    ) => ViewModelConstructor<TContext>,
+  >(ViewModel: TViewModel): { vm: InstanceType<TViewModel>; context: TContext };
+  function useStore<
+    TViewModel extends new (
+      context: TContext,
+      p: ConstructorParameters<TViewModel>[1],
     ) => ViewModelConstructor<TContext>,
   >(
     ViewModel: TViewModel,
     props: ConstructorParameters<TViewModel>[1],
-    exclude?: Partial<Record<keyof ConstructorParameters<TViewModel>[1], false>>
+    exclude?: Partial<
+      Record<keyof ConstructorParameters<TViewModel>[1], false>
+    >,
   ): { vm: InstanceType<TViewModel>; context: TContext };
   function useStore(ViewModel?: any, props?: any, exclude?: any) {
     const isFirstRenderRef = useRef(true);
@@ -110,12 +113,15 @@ export function createUseStore<TContext>(
   return useStore;
 }
 
-export function appendAutoRun <C extends ViewModelConstructor<any>>(ctx: C, ...fns: Array<() => void>) {
+export function appendAutoRun<C extends ViewModelConstructor<any>>(
+  ctx: C,
+  ...fns: Array<() => void>
+) {
   if (!ctx.autorunDisposers) {
     ctx.autorunDisposers = [];
   }
-  fns.forEach(fn => {
+  fns.forEach((fn) => {
     const disposer = autorun(fn);
     ctx.autorunDisposers?.push(disposer);
-  })
+  });
 }

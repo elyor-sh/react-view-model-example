@@ -1,4 +1,4 @@
-import {ChevronUp, Home, User2} from "lucide-react"
+import { ChevronUp, Home, User2 } from "lucide-react";
 
 import {
   Sidebar,
@@ -10,12 +10,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/shared/ui/sidebar"
-import {Link} from "react-router";
-import {observer} from "mobx-react-lite";
-import {useGlobalStore} from "@/app/globals.ts";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuTrigger} from "@/shared/ui/dropdown-menu.tsx";
-import {Logout} from "@/features/logout/ui";
+} from "@/shared/ui/sidebar";
+import { Link } from "react-router";
+import { observer } from "mobx-react-lite";
+import { useGlobalStore } from "@/app/globals.ts";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/shared/ui/dropdown-menu.tsx";
+import { Logout } from "@/features/logout/ui";
 
 const items = [
   {
@@ -23,10 +27,12 @@ const items = [
     url: "/",
     icon: Home,
   },
-]
+];
 
 export const AppSidebar = observer(() => {
-  const {context: {session}} = useGlobalStore()
+  const {
+    context: { session },
+  } = useGlobalStore();
 
   return (
     <Sidebar>
@@ -70,7 +76,7 @@ export const AppSidebar = observer(() => {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
-})
+  );
+});
 
 AppSidebar.displayName = "AppSidebar";
