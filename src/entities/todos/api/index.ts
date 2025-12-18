@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { defaultListParams } from "@/shared/constants/default-params.ts";
+import { defaultListParams } from "@/shared/constants/default-params";
 
 export const todoListQueryParamsSchema = z.object({
   ...defaultListParams,

@@ -13,3 +13,7 @@ export function stringifyQueryParams(params: Record<string, unknown>): string {
 export function parseQueryParamsFromUrl(url: string) {
   return qs.parseUrl(url).query;
 }
+
+export function parseQueryStringFromUrl(url: string) {
+  return new URL(url).searchParams.toString();
+}
