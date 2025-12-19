@@ -3,13 +3,13 @@ import {
   type ViewModelConstructor,
 } from "@/shared/lib/create-use-store.ts";
 import type { TodosPageContextType } from "@/pages/todo/provider";
-import { runInAction } from "mobx";
 import { type ParamsWithSignal, withAsync } from "@/shared/lib/withAsync.ts";
 import { http } from "@/shared/http";
 import { todoListQueryParamsSchema } from "@/entities/todos/api";
 import type { AppRouter } from "@/provider/router-provider/model";
 import { parseError } from "@/shared/lib/parseError";
 import type { Todo } from "@/entities/todos/model";
+import { action, makeObservable } from "mobx";
 
 type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
@@ -22,6 +22,8 @@ export class TodoListVM implements ViewModel {
     public context: TodosPageContextType,
     public props: Props,
   ) {
+    makeObservable(this, { setTodos: action });
+
     appendAutoRun(this, () => {
       void this.loadTodos();
     });
@@ -33,9 +35,7 @@ export class TodoListVM implements ViewModel {
         this.props.router.queryParams,
       );
       const res = await http.get<Todo[]>("/todos", { params, signal });
-      runInAction(() => {
-        this.context.todoModel.todoList = res.data;
-      });
+      this.setTodos(res.data);
     } catch (error) {
       parseError(error);
     }
@@ -45,10 +45,9 @@ export class TodoListVM implements ViewModel {
     async ({ signal, id }: ParamsWithSignal<{ id: number }>) => {
       try {
         await http.delete(`/todos/${id}`, { signal });
-        runInAction(() => {
-          this.context.todoModel.todoList =
-            this.context.todoModel.todoList.filter((todo) => todo.id !== id);
-        });
+        this.setTodos(
+          this.context.todoModel.todoList.filter((todo) => todo.id !== id),
+        );
       } catch (error) {
         parseError(error);
       }
@@ -58,5 +57,9 @@ export class TodoListVM implements ViewModel {
   beforeUnmount() {
     this.loadTodos.abortController?.abort();
     this.deleteTodo.abortController?.abort();
+  }
+
+  setTodos(todos: Todo[]) {
+    this.context.todoModel.todoList = todos;
   }
 }

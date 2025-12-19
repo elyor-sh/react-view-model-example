@@ -16,7 +16,9 @@ export const TodosFilter = observer(() => {
       />
       <UserSelect
         value={vm.queryParams.userId?.toString()}
-        onValueChange={(userId) => vm.context.router.setQueryParams({ userId })}
+        onValueChange={(userId) =>
+          vm.setQueryParams({ userId: Number(userId) })
+        }
       />
     </>
   );

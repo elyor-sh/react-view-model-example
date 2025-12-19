@@ -20,6 +20,10 @@ export class TodoListFilterVM implements ViewModel {
     return this.context.router.queryParams as TodoListQueryParams;
   }
 
+  setQueryParams(params: Partial<TodoListQueryParams>) {
+    this.context.router.setQueryParams(params);
+  }
+
   search = debounce((e: ChangeEvent<HTMLInputElement>) => {
     this.context.router.setQueryParams({ search: e.target.value });
   }, 300);
