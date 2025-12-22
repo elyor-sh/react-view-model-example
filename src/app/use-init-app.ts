@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FiltersModel } from "@/provider/filters-provider/model";
 import { AppRouter } from "@/provider/router-provider/model";
-import { createAppRouter } from "@/app/router.tsx";
-import { Globals } from "@/app/globals.ts";
+import { createAppRouter } from "@/app/router";
+import { Globals } from "@/app/globals";
 
 export const useInitApp = () => {
   const [filtersModel] = useState(() => new FiltersModel());

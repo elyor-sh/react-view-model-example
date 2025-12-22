@@ -28,6 +28,7 @@ export function validateLocationSearch<T extends ZodRawShape>(
   );
 
   if (extraKeys.length > 0 || extraKeysT.length > 0) {
+    // если есть фильтры в глобальных фильтрах, то используем их
     if (filtersModel.filters[pathname]) {
       const params = filtersModel.filters[pathname];
       return redirect(`/?${params}`);
