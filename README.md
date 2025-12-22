@@ -1,69 +1,192 @@
-# React + TypeScript + Vite
+# ERP Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Современное веб-приложение для управления задачами (Todos) и пользователями, построенное на React с использованием Feature-Sliced Design архитектуры.
 
-Currently, two official plugins are available:
+## 🚀 Технологический стек
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Основные технологии
+- **React 19** - UI библиотека
+- **TypeScript 5.8** - типизация
+- **Vite 7** - сборщик и dev-сервер
+- **MobX 6** - управление состоянием
+- **React Router 7** - маршрутизация
 
-## Expanding the ESLint configuration
+### UI и стилизация
+- **Tailwind CSS 4** - utility-first CSS фреймворк
+- **Radix UI** - доступные UI компоненты
+- **shadcn/ui** - переиспользуемые компоненты
+- **Lucide React** - иконки
+- **Sonner** - уведомления (toast)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Формы и валидация
+- **React Hook Form** - управление формами
+- **Zod 4** - схемы валидации
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Дополнительные библиотеки
+- **Axios** - HTTP клиент
+- **Lodash-es** - утилиты
+- **Query String** - работа с URL параметрами
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### Инструменты разработки
+- **ESLint** - линтинг кода
+- **Prettier** - форматирование кода
+- **Husky** - git hooks
+- **Lint-staged** - линтинг staged файлов
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📁 Архитектура проекта
+
+Проект следует принципам **Feature-Sliced Design (FSD)**:
+
+```
+src/
+├── app/              # Инициализация приложения, глобальные стили, роутинг
+├── pages/            # Страницы приложения (login, todos)
+├── widgets/          # Композитные блоки (layout, sidebar)
+├── features/         # Бизнес-функции (auth, logout, todos filters)
+├── entities/         # Бизнес-сущности (session, todos, users)
+├── shared/           # Переиспользуемый код
+│   ├── ui/          # UI компоненты
+│   ├── lib/         # Утилиты и хелперы
+│   ├── http/        # HTTP клиент
+│   └── constants/   # Константы
+└── provider/         # Провайдеры контекста (auth, filters, router)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🎯 Основные возможности
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- ✅ Аутентификация пользователей
+- ✅ Управление списком задач (Todos)
+- ✅ Фильтрация и поиск задач
+- ✅ Адаптивный sidebar
+- ✅ Валидация форм с Zod
+- ✅ Управление состоянием с MobX
+- ✅ Типобезопасная маршрутизация
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🛠️ Установка и запуск
+
+### Требования
+- Node.js 18+
+- npm/yarn/pnpm
+
+### Установка зависимостей
+```bash
+npm install
 ```
+
+### Запуск в режиме разработки
+```bash
+npm run dev
+```
+
+### Сборка для продакшена
+```bash
+npm run build
+```
+
+### Предпросмотр production сборки
+```bash
+npm run preview
+```
+
+### Линтинг
+```bash
+# Проверка кода
+npm run lint
+
+# Автоматическое исправление
+npm run lint:fix
+```
+
+## 🏗️ Ключевые паттерны
+
+### MobX View Models
+Проект использует паттерн ViewModel для управления состоянием компонентов:
+
+```typescript
+export class TodoListVM implements ViewModel {
+  constructor(
+    public context: TodosPageContextType,
+    public props: Props,
+  ) {
+    makeViewModel(this);
+  }
+
+  loadTodos = withAsync(async ({ signal }) => {
+    // Логика загрузки
+  });
+}
+```
+
+### Глобальное состояние
+Глобальное состояние управляется через `Globals` класс:
+- `SessionModel` - данные сессии пользователя
+- `AppRouter` - управление маршрутизацией
+
+### Типобезопасная маршрутизация
+Использование Zod схем для валидации query параметров:
+
+```typescript
+export const todoListQueryParamsSchema = z.object({
+  search: z.string().optional(),
+  userId: z.coerce.number().optional(),
+});
+```
+
+## 📝 Скрипты
+
+| Команда | Описание |
+|---------|----------|
+| `npm run dev` | Запуск dev-сервера |
+| `npm run build` | Сборка для продакшена |
+| `npm run preview` | Предпросмотр production сборки |
+| `npm run lint` | Проверка кода линтером |
+| `npm run lint:fix` | Автоисправление ошибок линтера |
+
+
+
+
+## 🔧 Конфигурация
+
+### Vite
+- Алиас `@` указывает на `./src`
+- Плагины: React, Tailwind CSS
+
+### ESLint
+- TypeScript ESLint
+- React Hooks правила
+- Prettier интеграция
+- Автоматическое форматирование
+
+### Tailwind CSS
+- Стиль: New York
+- CSS переменные включены
+- Базовый цвет: neutral
+- Иконки: Lucide
+
+## 📦 Структура компонентов
+
+Компоненты организованы по слоям FSD:
+- **UI компоненты** (`shared/ui`) - базовые переиспользуемые компоненты
+- **Виджеты** (`widgets`) - композитные блоки (Layout, Sidebar)
+- **Фичи** (`features`) - бизнес-функции с UI
+- **Страницы** (`pages`) - композиция виджетов и фич
+
+## 🤝 Разработка
+
+Проект использует:
+- **Husky** для pre-commit хуков
+- **Lint-staged** для проверки только измененных файлов
+- **Prettier** для единообразного форматирования
+
+При коммите автоматически запускаются:
+1. ESLint с автоисправлением
+2. Prettier форматирование
+
+## 📄 Лицензия
+
+Private project
+
+---
+
+**Версия:** 0.0.0
+**Название:** erp-web
