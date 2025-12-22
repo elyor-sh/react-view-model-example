@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { FiltersModel } from "@/provider/filters-provider/model";
 import { AppRouter } from "@/provider/router-provider/model";
-import { router } from "@/app/router.tsx";
+import { createAppRouter } from "@/app/router.tsx";
 import { Globals } from "@/app/globals.ts";
 
 export const useInitApp = () => {
   const [filtersModel] = useState(() => new FiltersModel());
+  const [router] = useState(() => createAppRouter(filtersModel));
   const [appRouter] = useState(
     () =>
       new AppRouter(
@@ -22,5 +23,5 @@ export const useInitApp = () => {
     return () => unsubscribe();
   }, [appRouter.subscribe]);
 
-  return globals;
+  return { globals, router };
 };

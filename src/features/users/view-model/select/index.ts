@@ -31,7 +31,7 @@ export class UserSelectVM implements ViewModel {
     }));
   }
 
-  beforeMount() {
+  afterMount() {
     void this.loadUsers();
   }
 }

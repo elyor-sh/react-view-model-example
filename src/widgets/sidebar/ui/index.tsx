@@ -27,6 +27,11 @@ const items = [
     url: "/",
     icon: Home,
   },
+  {
+    title: "Users",
+    url: "/users",
+    icon: User2,
+  },
 ];
 
 export const AppSidebar = observer(() => {

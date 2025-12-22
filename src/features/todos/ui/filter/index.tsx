@@ -15,7 +15,7 @@ export const TodosFilter = observer(() => {
         onChange={vm.search}
       />
       <UserSelect
-        value={vm.queryParams.userId?.toString()}
+        value={vm.queryParams.userId?.toString() || ""}
         onValueChange={(userId) =>
           vm.setQueryParams({ userId: Number(userId) })
         }

@@ -9,7 +9,7 @@ import { todoListQueryParamsSchema } from "@/entities/todos/api";
 import type { AppRouter } from "@/provider/router-provider/model";
 import { parseError } from "@/shared/lib/parseError";
 import type { Todo } from "@/entities/todos/model";
-import { action, makeObservable } from "mobx";
+import { makeViewModel } from "@/shared/lib/make-view-model.ts";
 
 type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
@@ -22,7 +22,7 @@ export class TodoListVM implements ViewModel {
     public context: TodosPageContextType,
     public props: Props,
   ) {
-    makeObservable(this, { setTodos: action });
+    makeViewModel(this);
 
     appendAutoRun(this, () => {
       void this.loadTodos();

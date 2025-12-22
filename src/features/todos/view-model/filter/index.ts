@@ -1,19 +1,15 @@
 import type { ViewModelConstructor } from "@/shared/lib/create-use-store.ts";
 import type { GlobalContextType } from "@/app/globals.ts";
-import { makeAutoObservable } from "mobx";
 import { type TodoListQueryParams } from "@/entities/todos/api";
 import { debounce } from "lodash-es";
 import type { ChangeEvent } from "react";
+import { makeViewModel } from "@/shared/lib/make-view-model.ts";
 
 type ViewModel = ViewModelConstructor<GlobalContextType>;
 
 export class TodoListFilterVM implements ViewModel {
   constructor(public context: GlobalContextType) {
-    makeAutoObservable(
-      this,
-      { context: false, search: false },
-      { autoBind: true },
-    );
+    makeViewModel(this);
   }
 
   get queryParams() {

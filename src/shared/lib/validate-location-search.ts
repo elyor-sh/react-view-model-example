@@ -1,14 +1,18 @@
 import {
   parseQueryParams,
   parseQueryStringFromUrl,
+  stringifyQueryParams,
 } from "@/shared/lib/query-params.ts";
 import type { ZodObject, ZodRawShape } from "zod";
 import { redirect } from "react-router";
+import type { FiltersModel } from "@/provider/filters-provider/model";
 
 export function validateLocationSearch<T extends ZodRawShape>(
   url: string,
+  filtersModel: FiltersModel,
   $schema: ZodObject<T>,
 ) {
+  const pathname = new URL(url).pathname;
   const searchParams = parseQueryStringFromUrl(url);
   const query = parseQueryParams(searchParams);
 
@@ -24,10 +28,13 @@ export function validateLocationSearch<T extends ZodRawShape>(
   );
 
   if (extraKeys.length > 0 || extraKeysT.length > 0) {
-    const params = new URLSearchParams(
-      validQueryParams as Record<string, string>,
-    );
-    return redirect(`/?${params.toString()}`);
+    if (filtersModel.filters[pathname]) {
+      const params = filtersModel.filters[pathname];
+      return redirect(`/?${params}`);
+    }
+
+    const params = stringifyQueryParams(validQueryParams);
+    return redirect(`/?${params}`);
   }
 
   return validQueryParams;
