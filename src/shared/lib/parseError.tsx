@@ -1,6 +1,7 @@
 import { ZodError } from "zod";
 import { toast } from "sonner";
 import type { ReactNode } from "react";
+import type { AxiosError } from "axios";
 
 function isAbortError(error: unknown): boolean {
   return (
@@ -10,6 +11,15 @@ function isAbortError(error: unknown): boolean {
       error !== null &&
       "code" in error &&
       (error as { code: string }).code === "ERR_CANCELED")
+  );
+}
+
+function isAxiosError(error: unknown): error is AxiosError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "isAxiosError" in error &&
+    (error as { isAxiosError: boolean }).isAxiosError
   );
 }
 
@@ -49,6 +59,41 @@ export function parseError(error: unknown): ParsedError {
 
     return {
       message: "Validation error",
+      fields,
+    };
+  }
+
+  if (isAxiosError(error)) {
+    const data = error.response?.data as
+      | {
+          message?: string;
+          errors?: Record<string, string>;
+        }
+      | undefined;
+
+    const message = data?.message || error.message || "Request failed";
+
+    const fields = data?.errors ?? {};
+
+    if (Object.keys(fields).length > 0) {
+      toast.error(
+        <div>
+          <h6>{message}</h6>
+          <ul>
+            {Object.entries(fields).map(([field, msg]) => (
+              <li key={field}>
+                {field}: {msg}
+              </li>
+            ))}
+          </ul>
+        </div>,
+      );
+    } else {
+      toast.error(message);
+    }
+
+    return {
+      message,
       fields,
     };
   }
