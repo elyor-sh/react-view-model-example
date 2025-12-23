@@ -1,5 +1,5 @@
 import type { Location, NavigateFunction, RouterState } from "react-router";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, toJS } from "mobx";
 import { isEqual } from "lodash-es";
 import {
   parseQueryParams,
@@ -17,7 +17,7 @@ export class AppRouter {
     public filtersModel: FiltersModel,
   ) {
     this.params = matches[matches.length - 1].params;
-    makeAutoObservable(this, { navigate: false }, { autoBind: true });
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   get queryParams() {
@@ -26,7 +26,7 @@ export class AppRouter {
 
   subscribe(state: RouterState) {
     const location = { ...state.location, key: this.location.key };
-    if (!isEqual(this.location, location)) {
+    if (!isEqual(toJS(this.location), location)) {
       this.location = state.location;
     }
     const params = state.matches[state.matches.length - 1].params;

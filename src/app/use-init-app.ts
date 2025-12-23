@@ -4,9 +4,12 @@ import { AppRouter } from "@/provider/router-provider/model";
 import { createAppRouter } from "@/app/router";
 import { Globals } from "@/app/globals";
 
+const filtersModel = new FiltersModel();
+const router = createAppRouter(filtersModel);
+
 export const useInitApp = () => {
-  const [filtersModel] = useState(() => new FiltersModel());
-  const [router] = useState(() => createAppRouter(filtersModel));
+  // const [filtersModel] = useState(() => new FiltersModel());
+  // const [router] = useState(() => createAppRouter(filtersModel));
   const [appRouter] = useState(
     () =>
       new AppRouter(

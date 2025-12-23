@@ -9,7 +9,7 @@ type ViewModel = ViewModelConstructor<GlobalContextType>;
 
 export class TodoListFilterVM implements ViewModel {
   constructor(public context: GlobalContextType) {
-    makeViewModel(this);
+    makeViewModel(this, { search: false, setQueryParams: false });
   }
 
   get queryParams() {

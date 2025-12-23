@@ -1,11 +1,10 @@
 import "./globals.css";
 import { RouterProvider } from "react-router";
 import { GlobalContext } from "@/app/globals.ts";
-import { observer } from "mobx-react-lite";
 import { Toaster } from "sonner";
 import { useInitApp } from "@/app/use-init-app.ts";
 
-export const App = observer(() => {
+export const App = () => {
   const { globals, router } = useInitApp();
 
   return (
@@ -14,6 +13,4 @@ export const App = observer(() => {
       <RouterProvider router={router} />
     </GlobalContext>
   );
-});
-
-App.displayName = "App";
+};
