@@ -12,12 +12,10 @@ export const createAppRouter = (filtersModel: FiltersModel) => {
     {
       path: "/login",
       element: <LoginPage />,
-      HydrateFallback: () => null,
     },
     {
       path: "",
       element: <AuthProvider />,
-      HydrateFallback: () => null,
       children: [
         {
           path: "",

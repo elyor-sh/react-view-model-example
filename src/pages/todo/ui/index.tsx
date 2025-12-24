@@ -5,9 +5,9 @@ import {
   useTodosPageStore,
 } from "@/pages/todo/provider";
 import { TodosList } from "@/entities/todos/ui";
-import { useGlobalStore } from "@/app/globals.ts";
+import { useGlobalStore } from "@/app/globals";
 import { TodoListVM } from "@/entities/todos/view-model";
-import { Loading } from "@/shared/ui/spinner.tsx";
+import { Loading } from "@/shared/ui/spinner";
 import { TodosFilter } from "@/features/todos/ui/filter";
 
 const TodosPageContent = observer(() => {

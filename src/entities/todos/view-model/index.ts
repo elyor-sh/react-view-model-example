@@ -1,15 +1,15 @@
 import {
   appendAutoRun,
   type ViewModelConstructor,
-} from "@/shared/lib/create-use-store.ts";
+} from "@/shared/lib/create-use-store";
 import type { TodosPageContextType } from "@/pages/todo/provider";
-import { type ParamsWithSignal, withAsync } from "@/shared/lib/withAsync.ts";
+import { type ParamsWithSignal, withAsync } from "@/shared/lib/withAsync";
 import { http } from "@/shared/http";
 import { todoListQueryParamsSchema } from "@/entities/todos/api";
 import type { AppRouter } from "@/provider/router-provider/model";
 import { parseError } from "@/shared/lib/parseError";
 import type { Todo } from "@/entities/todos/model";
-import { makeViewModel } from "@/shared/lib/make-view-model.ts";
+import { makeViewModel } from "@/shared/lib/make-view-model";
 
 type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
@@ -38,6 +38,7 @@ export class TodoListVM implements ViewModel {
       this.setTodos(res.data);
     } catch (error) {
       parseError(error);
+      throw error;
     }
   });
 
@@ -50,6 +51,7 @@ export class TodoListVM implements ViewModel {
         );
       } catch (error) {
         parseError(error);
+        throw error;
       }
     },
   );

@@ -28,12 +28,18 @@ type ParsedError = {
   fields: Record<string, string>;
 };
 
-export function parseError(error: unknown): ParsedError {
+export function parseError(error: unknown, showToast = true): ParsedError {
   if (isAbortError(error)) {
     return {
       message: "Aborted",
       fields: {},
     };
+  }
+
+  function show(fn: () => void) {
+    if (showToast) {
+      fn();
+    }
   }
 
   if (error instanceof ZodError) {
@@ -50,11 +56,13 @@ export function parseError(error: unknown): ParsedError {
       );
     }
 
-    toast.error(
-      <div>
-        <h6>Validation error:</h6>
-        <ul>{errorMessages}</ul>
-      </div>,
+    show(() =>
+      toast.error(
+        <div>
+          <h6>Validation error:</h6>
+          <ul>{errorMessages}</ul>
+        </div>,
+      ),
     );
 
     return {
@@ -76,20 +84,22 @@ export function parseError(error: unknown): ParsedError {
     const fields = data?.errors ?? {};
 
     if (Object.keys(fields).length > 0) {
-      toast.error(
-        <div>
-          <h6>{message}</h6>
-          <ul>
-            {Object.entries(fields).map(([field, msg]) => (
-              <li key={field}>
-                {field}: {msg}
-              </li>
-            ))}
-          </ul>
-        </div>,
+      show(() =>
+        toast.error(
+          <div>
+            <h6>{message}</h6>
+            <ul>
+              {Object.entries(fields).map(([field, msg]) => (
+                <li key={field}>
+                  {field}: {msg}
+                </li>
+              ))}
+            </ul>
+          </div>,
+        ),
       );
     } else {
-      toast.error(message);
+      show(() => toast.error(message));
     }
 
     return {
@@ -99,14 +109,14 @@ export function parseError(error: unknown): ParsedError {
   }
 
   if (error instanceof Error) {
-    toast.error(error.message);
+    show(() => toast.error(error.message));
     return {
       message: error.message,
       fields: {},
     };
   }
 
-  toast.error("Unknown error");
+  show(() => toast.error("Unknown error"));
 
   return {
     message: "Unknown error",
