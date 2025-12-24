@@ -3,6 +3,7 @@
 import { type AnnotationsMap, makeAutoObservable } from "mobx";
 import type { CreateObservableOptions } from "mobx/src/internal.ts";
 import { WITH_ASYNC_STATE_MARK } from "@/shared/lib/withAsync.ts";
+import { FORM_CONTROLLER } from "@/shared/lib/form-builder.tsx";
 
 type MakeObservableOptions = Omit<CreateObservableOptions, "proxy">;
 
@@ -20,10 +21,22 @@ export function makeViewModel<T extends object>(
   for (const key of Object.getOwnPropertyNames(instance)) {
     const value = (instance as any)[key];
 
-    if (
-      typeof value === "function" &&
-      value.__withAsyncState__ === WITH_ASYNC_STATE_MARK
-    ) {
+    const isOverride = () => {
+      if (
+        typeof value === "function" &&
+        value.__withAsyncState__ === WITH_ASYNC_STATE_MARK
+      ) {
+        return true;
+      }
+
+      if (value.__formController__ === FORM_CONTROLLER) {
+        return true;
+      }
+
+      return false;
+    };
+
+    if (isOverride()) {
       localOverrides[key] = false;
     }
   }

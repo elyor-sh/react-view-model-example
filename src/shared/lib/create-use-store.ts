@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { autorun, type IReactionDisposer, observable, runInAction } from "mobx";
+import { autorun, observable, runInAction } from "mobx";
 import type { Context } from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 
@@ -10,7 +10,7 @@ export interface ViewModelConstructor<TContext> {
   beforeMount?: () => void;
   afterMount?: () => void;
   beforeUnmount?: () => void;
-  autorunDisposers?: Array<IReactionDisposer>;
+  disposers?: Array<() => void>;
 }
 
 export function createUseStore<TContext>(
@@ -100,7 +100,7 @@ export function createUseStore<TContext>(
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        vm.autorunDisposers?.forEach((disposer) => disposer());
+        vm.disposers?.forEach((disposer) => disposer());
 
         vm.beforeUnmount?.();
       };
@@ -117,11 +117,11 @@ export function appendAutoRun<C extends ViewModelConstructor<any>>(
   ctx: C,
   ...fns: Array<() => void>
 ) {
-  if (!ctx.autorunDisposers) {
-    ctx.autorunDisposers = [];
+  if (!ctx.disposers) {
+    ctx.disposers = [];
   }
   fns.forEach((fn) => {
     const disposer = autorun(fn);
-    ctx.autorunDisposers?.push(disposer);
+    ctx.disposers?.push(disposer);
   });
 }

@@ -1,39 +1,38 @@
-import type { ViewModelConstructor } from "@/shared/lib/create-use-store.ts";
-import type { GlobalContextType } from "@/app/globals.ts";
-import { makeAutoObservable, runInAction } from "mobx";
+import type { ViewModelConstructor } from "@/shared/lib/create-use-store";
+import type { GlobalContextType } from "@/app/globals";
+import { runInAction } from "mobx";
 import { sleep } from "@/shared/http";
-import type { ChangeEvent } from "react";
-import { withAsync } from "@/shared/lib/withAsync.ts";
+import { withAsync } from "@/shared/lib/withAsync";
+import { makeViewModel } from "@/shared/lib/make-view-model";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema } from "@/features/auth/api";
+import { createForm, createFormState } from "@/shared/lib/form-builder";
 
 type ViewModel = ViewModelConstructor<GlobalContextType>;
 
-type Form = {
-  email: string;
-  password: string;
-};
-
 export class LoginVM implements ViewModel {
-  form: Form = {
-    email: "",
-    password: "",
-  };
+  form = createForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onSubmit",
+    resolver: zodResolver(loginSchema),
+  });
+
+  private state = createFormState(this, this.form.control);
 
   constructor(public context: GlobalContextType) {
-    makeAutoObservable(
-      this,
-      { context: false, login: false },
-      { autoBind: true },
-    );
+    makeViewModel(this);
   }
 
-  setForm(e: ChangeEvent<HTMLInputElement>) {
-    const name = e.target.name as keyof Form;
-    this.form[name] = e.target.value;
+  get formState() {
+    return this.state.formState;
   }
 
   login = withAsync(async () => {
     await sleep(1000);
-    const user = this.form;
+    const user = this.form.getValues();
     runInAction(() => {
       this.context.session.email = user.email;
       this.context.session.loginDate = new Date().toISOString();
