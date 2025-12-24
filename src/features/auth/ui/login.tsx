@@ -11,10 +11,8 @@ import { LoginVM } from "@/features/auth/view-model";
 export const Login = observer(() => {
   const { vm } = useGlobalStore(LoginVM);
 
-  const { register, handleSubmit } = vm.form;
-
   return (
-    <form onSubmit={handleSubmit(vm.login)}>
+    <form onSubmit={vm.form.handleSubmit(vm.login)}>
       <CardContent className="space-y-4">
         {/* Email Field */}
         <div className="space-y-2">
@@ -26,7 +24,7 @@ export const Login = observer(() => {
               type="email"
               placeholder="example@company.com"
               className="pl-10"
-              {...register("email")}
+              {...vm.form.register("email")}
             />
           </div>
           {vm.formState.errors.email && (
@@ -54,7 +52,7 @@ export const Login = observer(() => {
               type="password"
               placeholder="••••••••"
               className="pl-10"
-              {...register("password")}
+              {...vm.form.register("password")}
             />
           </div>
           {vm.formState.errors.password && (
