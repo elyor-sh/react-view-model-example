@@ -10,6 +10,7 @@ import type { AppRouter } from "@/provider/router-provider/model";
 import { parseError } from "@/shared/lib/parseError";
 import type { Todo } from "@/entities/todos/model";
 import { makeViewModel } from "@/shared/lib/make-view-model";
+import { runInAction } from "mobx";
 
 type ViewModel = ViewModelConstructor<TodosPageContextType>;
 
@@ -23,10 +24,7 @@ export class TodoListVM implements ViewModel {
     public props: Props,
   ) {
     makeViewModel(this);
-
-    appendAutoRun(this, () => {
-      void this.loadTodos();
-    });
+    appendAutoRun(this, () => this.loadTodos());
   }
 
   loadTodos = withAsync(async ({ signal }) => {
@@ -62,6 +60,8 @@ export class TodoListVM implements ViewModel {
   }
 
   setTodos(todos: Todo[]) {
-    this.context.todoModel.todoList = todos;
+    runInAction(() => {
+      this.context.todoModel.todoList = todos;
+    });
   }
 }

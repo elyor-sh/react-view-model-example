@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
-import { toast } from "sonner";
 import type { ReactNode } from "react";
 import type { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 function isAbortError(error: unknown): boolean {
   return (

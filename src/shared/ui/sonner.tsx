@@ -5,22 +5,25 @@ import {
   OctagonXIcon,
   TriangleAlertIcon,
 } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { ToastContainer, type ToastContainerProps } from "react-toastify";
 
-const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme();
-
+const Toaster = ({ ...props }: ToastContainerProps) => {
   return (
-    <Sonner
-      theme={theme as ToasterProps["theme"]}
+    <ToastContainer
       className="toaster group"
-      icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <Loader2Icon className="size-4 animate-spin" />,
+      icon={({ type }) => {
+        switch (type) {
+          case "success":
+            return <CircleCheckIcon className="size-4" />;
+          case "info":
+            return <InfoIcon className="size-4" />;
+          case "warning":
+            return <TriangleAlertIcon className="size-4" />;
+          case "error":
+            return <OctagonXIcon className="size-4" />;
+          default:
+            return <Loader2Icon className="size-4 animate-spin" />;
+        }
       }}
       style={
         {

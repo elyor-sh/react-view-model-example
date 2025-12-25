@@ -9,7 +9,7 @@ export const App = () => {
 
   return (
     <GlobalContext value={globals}>
-      <Toaster position="bottom-right" />
+      <Toaster />
       <RouterProvider router={router} />
     </GlobalContext>
   );
